@@ -1,0 +1,88 @@
+# Инструкция по установке и запуску Telegram бота на новом сервере
+
+## Требования
+- Python 3.10+
+- Установленные зависимости из файла requirements-for-new-server.txt
+
+## Шаги по установке
+
+1. Распакуйте zip-архив в удобную директорию на новом сервере
+
+2. Создайте виртуальное окружение Python (рекомендуется):
+   ```
+   python -m venv venv
+   source venv/bin/activate  # Для Linux/Mac
+   venv\Scripts\activate     # Для Windows
+   ```
+
+3. Установите необходимые зависимости:
+   ```
+   pip install -r requirements-for-new-server.txt
+   ```
+
+4. Настройте переменные окружения:
+   - `BOT_FEATHER_TOKEN`: токен вашего Telegram бота (получить у @BotFather)
+   - `SESSION_SECRET`: секретный ключ для Flask (любая строка)
+
+   Для Linux/Mac:
+   ```
+   export BOT_FEATHER_TOKEN='ваш_токен_бота'
+   export SESSION_SECRET='ваш_секретный_ключ'
+   ```
+
+   Для Windows:
+   ```
+   set BOT_FEATHER_TOKEN=ваш_токен_бота
+   set SESSION_SECRET=ваш_секретный_ключ
+   ```
+
+   Или создайте файл .env и используйте python-dotenv для загрузки переменных окружения.
+
+5. Важно: откройте файл `telegram_bot.py` и измените URL для анализа лица:
+   ```python
+   # Измените эту строку
+   FACE_ANALYZER_URL = "http://localhost:5000/analyze"
+   ```
+   на URL вашего нового сервера, например:
+   ```python
+   FACE_ANALYZER_URL = "http://ваш_сервер:5000/analyze"
+   ```
+
+## Запуск бота
+
+1. Запустите Flask приложение:
+   ```
+   gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app
+   ```
+
+2. В отдельном терминале запустите Telegram бота:
+   ```
+   python bot_server.py
+   ```
+
+## Тестирование бота
+
+Чтобы проверить, что бот работает правильно:
+```
+python test_bot.py
+```
+
+## Режимы работы бота
+
+### Long-polling (по умолчанию)
+Бот запрашивает обновления от Telegram API
+```
+python bot_server.py
+```
+
+### Webhook (для публичных серверов)
+Если ваш сервер доступен из интернета, вы можете использовать webhook:
+```
+python bot_server.py --webhook
+```
+
+## Устранение неполадок
+
+1. Если бот не подключается к Telegram API, проверьте правильность токена
+2. Если анализ лица не работает, убедитесь, что Flask приложение запущено и URL в `telegram_bot.py` указан верно
+3. Для сложной обработки изображений может потребоваться установка дополнительных системных библиотек для OpenCV и MediaPipe

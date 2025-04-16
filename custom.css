@@ -1,0 +1,92 @@
+/* Custom styling for the face analyzer app */
+
+.analysis-container {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-container {
+    border: 2px dashed var(--bs-border-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.upload-container:hover {
+    border-color: var(--bs-primary);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--bs-primary);
+}
+
+#canvas {
+    display: none;
+}
+
+#cameraContainer {
+    position: relative;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+#video {
+    width: 100%;
+    height: auto;
+    background-color: #000;
+}
+
+.camera-controls {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Face shape examples */
+.face-shape-examples {
+    margin-top: 2rem;
+}
+
+.face-shape-card {
+    height: 100%;
+    transition: transform 0.2s;
+}
+
+.face-shape-card:hover {
+    transform: translateY(-5px);
+}
+
+.face-shape-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--bs-primary);
+}
+
+/* Loading spinner */
+.spinner-container {
+    padding: 3rem;
+    text-align: center;
+}
+
+/* Face landmarks visualization */
+.landmarks-image {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .camera-controls {
+        flex-direction: column;
+    }
+    
+    .camera-controls .btn {
+        width: 100%;
+    }
+}

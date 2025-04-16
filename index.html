@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center py-5">
+    <h1 class="display-4">Face Shape Analyzer</h1>
+    <p class="lead">Discover your face shape using AI-powered analysis</p>
+    <hr class="my-4">
+    <p>Upload a photo or use your camera to find out if your face is oval, round, square, heart-shaped, or something else!</p>
+</section>
+
+<!-- Analysis Tool Section -->
+<section class="card shadow-sm mb-5">
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">Analyze Your Face Shape</h2>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Upload Options -->
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center mb-4">
+                    <div class="d-grid gap-2 col-12 col-md-6">
+                        <label for="imageUpload" class="btn btn-primary">
+                            <i class="fas fa-upload me-2"></i> Upload Photo
+                        </label>
+                        <input type="file" id="imageUpload" class="d-none" accept="image/*">
+                    </div>
+                    
+                    <div class="d-grid gap-2 col-12 col-md-6">
+                        <button id="captureButton" class="btn btn-primary">
+                            <i class="fas fa-camera me-2"></i> Use Camera
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Camera Container (hidden by default) -->
+                <div id="cameraContainer" class="d-none mb-4">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas"></canvas>
+                    
+                    <div class="camera-controls">
+                        <button id="capturePhoto" class="btn btn-success">
+                            <i class="fas fa-camera me-2"></i> Take Photo
+                        </button>
+                        <button id="cancelCapture" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Loading Spinner (hidden by default) -->
+                <div id="loadingSpinner" class="spinner-container d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">Analyzing your face shape...</p>
+                </div>
+                
+                <!-- Error Message (hidden by default) -->
+                <div id="errorMessage" class="alert alert-danger d-none" role="alert"></div>
+                
+                <!-- Results Container (hidden by default) -->
+                <div id="resultContainer" class="d-none"></div>
+                
+                <!-- Upload Instructions -->
+                <div class="alert alert-info mt-4">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-info-circle me-2"></i> For best results:
+                    </h5>
+                    <ul class="mb-0">
+                        <li>Use a photo with good lighting</li>
+                        <li>Face the camera directly</li>
+                        <li>Ensure your entire face is visible</li>
+                        <li>Pull hair away from your face</li>
+                        <li>Maintain a neutral expression</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Face Shapes Information Section -->
+<section id="face-shapes" class="mb-5">
+    <h2 class="text-center mb-4">Understanding Face Shapes</h2>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Oval Face -->
+        <div class="col">
+            <div class="card h-100 face-shape-card">
+                <div class="card-body text-center">
+                    <div class="face-shape-icon">
+                        <i class="fas fa-egg"></i>
+                    </div>
+                    <h3 class="card-title">Oval</h3>
+                    <p class="card-text">Balanced proportions with a slightly rounded forehead and jawline. Face length is about 1.5 times its width.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Round Face -->
+        <div class="col">
+            <div class="card h-100 face-shape-card">
+                <div class="card-body text-center">
+                    <div class="face-shape-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <h3 class="card-title">Round</h3>
+                    <p class="card-text">Soft angles with similar width and length. Characterized by full cheeks and a rounded chin.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Square Face -->
+        <div class="col">
+            <div class="card h-100 face-shape-card">
+                <div class="card-body text-center">
+                    <div class="face-shape-icon">
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <h3 class="card-title">Square</h3>
+                    <p class="card-text">Strong jawline with minimal tapering. The forehead and jawline widths are similar with angular features.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Heart Face -->
+        <div class="col">
+            <div class="card h-100 face-shape-card">
+                <div class="card-body text-center">
+                    <div class="face-shape-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="card-title">Heart</h3>
+                    <p class="card-text">Wide forehead that tapers down to a narrow, sometimes pointed chin. High cheekbones are common.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Diamond Face -->
+        <div class="col">
+            <div class="card h-100 face-shape-card">
+                <div class="card-body text-center">
+                    <div class="face-shape-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="card-title">Diamond</h3>
+                    <p class="card-text">Narrow forehead and jawline with the cheekbones being the widest part of the face. Angular features are common.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Oblong Face -->
+        <div class="col">
+            <div class="card h-100 face-shape-card">
+                <div class="card-body text-center">
+                    <div class="face-shape-icon">
+                        <i class="fas fa-rectangle-portrait"></i>
+                    </div>
+                    <h3 class="card-title">Oblong</h3>
+                    <p class="card-text">Longer than wide with a long straight cheek line. The face has similar width at forehead, cheeks, and jaw.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="card shadow-sm mb-5">
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">About This Tool</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h4>How It Works</h4>
+                <ol>
+                    <li>Upload a photo or take one with your camera</li>
+                    <li>Our AI analyzes your facial features using MediaPipe</li>
+                    <li>The algorithm measures key facial proportions</li>
+                    <li>Your face shape is determined based on these measurements</li>
+                    <li>Results are displayed with a visual overlay of facial landmarks</li>
+                </ol>
+            </div>
+            
+            <div class="col-md-6">
+                <h4>Technology</h4>
+                <p>This tool uses:</p>
+                <ul>
+                    <li><strong>MediaPipe</strong> - Google's open-source framework for building multimodal machine learning pipelines</li>
+                    <li><strong>OpenCV</strong> - Computer vision library for image processing</li>
+                    <li><strong>Face Mesh</strong> - Advanced facial landmark detection</li>
+                    <li><strong>Custom algorithms</strong> - To analyze facial proportions and classify face shapes</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning mt-4">
+            <i class="fas fa-shield-alt me-2"></i>
+            <strong>Privacy Note:</strong> Your photos are processed on the server but are not stored permanently. We respect your privacy.
+        </div>
+    </div>
+</section>
+{% endblock %}
