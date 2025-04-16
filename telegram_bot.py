@@ -32,7 +32,7 @@ if not TOKEN:
 API_URL = f"https://api.telegram.org/bot{TOKEN}"
 
 # URL для анализа лица (API нашего приложения)
-FACE_ANALYZER_URL = "http://localhost:5000/analyze"  # gunicorn сервер работает на порту 5000
+ FACE_ANALYZER_URL = "https://face-1-naum.onrender.com/analyze" # gunicorn сервер работает на порту 5000
 
 # Настройки бота
 HELP_MESSAGE = """
